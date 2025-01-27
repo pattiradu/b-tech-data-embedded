@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Data Submission</title>
+</head>
+
+<body>
+    <h1>Submit Data to Google Sheet</h1>
+    <form id="dataForm">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="phone">Phone:</label><br>
+        <input type="text" id="phone" name="phone" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzTeL1EJgzZVdMv2XIDgLB2YeOl_AiLCkQeEdt68NJlYWi8_zT8L8KGP-YUYAlkAtfN/exec"; // Replace with your Web App URL
+
+        document.getElementById('dataForm').addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent form submission
+
+            const formData = new FormData(e.target); // Collect form data
+            const responseMessage = document.getElementById('responseMessage');
+
+            fetch(scriptURL, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    responseMessage.textContent = data; // Display success message
+                    e.target.reset(); // Clear the form
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    responseMessage.textContent = "An error occurred. Please try again.";
+                });
+        });
+    </script>
+</body>
+
+</html>
